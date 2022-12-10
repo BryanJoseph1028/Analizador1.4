@@ -1,0 +1,265 @@
+options{
+	LOOKAHEAD = 4;
+}
+
+PARSER_BEGIN(AnalizadorPHP)
+class AnalizadorPHP {
+	public static int numeroDeErrores = 0;
+
+	public static void main(String[] args) throws ParseException {
+		AnalizadorPHP analizador = new AnalizadorPHP(System.in);
+		analizador.Programa();
+		System.out.println("CANTIDAD DE ERRORES: " + numeroDeErrores);
+		System.out.println("EL ANALISIS HA TERMINADO.");
+	}
+}
+PARSER_END(AnalizadorPHP)
+
+SKIP:
+{
+	" " | "\n" | "\r" | "\r\n" | "\t"
+}
+
+//TOKEN PARA SIGNOS DE PUNTUACIÓN
+
+TOKEN: {
+	<DOLAR : "$">	{System.out.println("DOLAR -> " + image + "\r\n");}
+	|<PUNTOYCOMA : ";"> {System.out.println("PUNTO Y COMA ->" + image + "\r\n");}
+	|<PUNTO : "."> {System.out.println("PUNTO ->" + image + "\r\n");}
+	|<COMA : ","> {System.out.println("COMA ->" + image + "\r\n");}
+	|<DOSPUNTOS : ":"> {System.out.println("DOSPUNTOS ->" + image + "\r\n");}
+	|<PARENIZQ : "("> {System.out.println("PARENIZQ ->" + image + "\r\n");}
+	|<PARENDER : ")"> {System.out.println("PARENDER ->" + image + "\r\n");}
+	|<LLAVEIZQ : "{"> {System.out.println("LLAVEIZQ ->" + image + "\r\n");}
+	|<LLAVEDER : "}"> {System.out.println("LLAVEDER ->" + image + "\r\n");}
+	|<CORCHIZQ : "["> {System.out.println("CORCHIZQ ->" + image + "\r\n");}
+	|<CORCHDER : "]"> {System.out.println("CORCHDER ->" + image + "\r\n");}
+	|<AMPERSAND : "&"> {System.out.println("AMPERSAND ->" + image + "\r\n");}
+
+}
+
+//TOKEN PARA OPERADORES
+TOKEN: {
+	<OPERASIGNACION : "="> {System.out.println("OPERASIGNACION ->" + image + "\r\n");}
+	|<OPERARITMETICO : ("+") | ("-") | ("*") | ("/") | ("%") | ("**")> {System.out.println("OPERARITMETICO ->" + image + "\r\n");}
+	|<OPERCOMBINADO_ART : ("+=") | ("-=") | ("*=") | ("/=") | ("%=") | ("**=")> {System.out.println("OPERCOMBINADO_ART ->" + image + "\r\n");}
+	|<OPERCOMBINADO_CAD : ".="> {System.out.println("OPERCOMBINADO_CAD ->" + image + "\r\n");}
+	|<OPERCOMPARACION : ("==") | ("===") | ("!=") | ("<>") | ("!==") | ("<") | (">") | ("<=") | (">=") | ("<=>")> {System.out.println("OPERCOMPARACION ->" + image + "\r\n");}
+	|<OPERINCDEC : ("++") | ("--")> {System.out.println("OPERINCDEC ->" + image + "\r\n");}
+	|<OPERLOGICO : ("and") | ("or") | ("xor") | ("&&") | ("||")> {System.out.println("OPERLOGICO ->" + image + "\r\n");}
+	|<OPERLOGNOT : "!"> {System.out.println("OPERLOGNOT ->" + image + "\r\n");}
+	|<OPERASIG_ARRAY : "=>"> {System.out.println("OPERASIG_ARRAY ->" + image + "\r\n");}
+}
+
+//TOKEN PARA ESTRUCTURAS DE CONTROL
+
+TOKEN:{
+	<IF : "if"> {System.out.println("IF ->" + image + "\r\n");}
+	| <ELSE : "else"> {System.out.println("ELSE ->" + image + "\r\n");}
+	| <DO : "do"> {System.out.println("DO ->" + image + "\r\n");}
+	| <WHILE : "while"> {System.out.println("WHILE ->" + image + "\r\n");}
+	| <ENDWHILE : "endwhile"> {System.out.println("ENDWHILE ->" + image + "\r\n");}
+	| <FOR : "for"> {System.out.println("FOR ->" + image + "\r\n");}
+	| <SWITCH : "switch"> {System.out.println("SWITCH ->" + image + "\r\n");}
+	| <CASE : "case"> {System.out.println("CASE ->" + image + "\r\n");}
+	| <ENDSWITCH : "endwswitch"> {System.out.println("ENDSWITCH ->" + image + "\r\n");}
+	| <BREAK : "break"> {System.out.println("BREAK ->" + image + "\r\n");}
+	| <CONTINUE : "continue"> {System.out.println("CONTINUE ->" + image + "\r\n");}
+	| <DEFAULT : "default"> {System.out.println("DEFAULT ->" + image + "\r\n");}
+}
+
+//TOKEN PARA PALABRAS RESERVADAS
+TOKEN:{
+	<INICIO : "<?php"> {System.out.println("INICIO ->" + image + "\r\n");}
+	| <FIN : "?>"> {System.out.println("FIN ->" + image + "\r\n");}
+	| <ECHO : "echo"> {System.out.println("ECHO ->" + image + "\r\n");}
+	| <GLOBAL : "global"> {System.out.println("GLOBAL ->" + image + "\r\n");}
+	| <STATIC : "static"> {System.out.println("STATIC ->" + image + "\r\n");}
+	| <CONST : "const"> {System.out.println("CONST ->" + image + "\r\n");}
+	| <PRINT : "print"> {System.out.println("PRINT ->" + image + "\r\n");}
+	| <FUNCTION : "function"> {System.out.println("FUNCTION ->" + image + "\r\n");}
+	| <RETURN : "return"> {System.out.println("RETURN ->" + image + "\r\n");}
+	| <NULL: "null"> {System.out.println("NULL ->" + image + "\r\n");}
+	//CLASES Y OBJETOS
+	| <CLASS: "class"> {System.out.println("CLASS ->" + image + "\r\n");}
+	| <PUBLIC: "public"> {System.out.println("PUBLIC ->" + image + "\r\n");}
+	| <PROTECTED: "protected"> {System.out.println("PROTECTED ->" + image + "\r\n");}
+	| <PRIVATE: "private"> {System.out.println("PRIVATE ->" + image + "\r\n");}
+	| <NEW: "new"> {System.out.println("NEW ->" + image + "\r\n");}
+	| <EXTENDS: "extends"> {System.out.println("EXTENDS ->" + image + "\r\n");}
+	
+}
+
+//TOKEN ESENCIALES
+TOKEN:{
+	<CADENA : "\""(~["\""])*"\""> {System.out.println("CADENA ->" + image + "\r\n");}
+	| <ENTERO : (["0"-"9"])+> {System.out.println("ENTERO ->" + image + "\r\n");}
+	| <REAL : (["0"-"9"])+ "." (["0"-"9"])+> {System.out.println("REAL ->" + image + "\r\n");}
+	| <IDENTIFICADOR : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])*> {System.out.println("IDENTIFICADOR ->" + image + "\r\n");}
+	
+}
+
+void Programa():{}{
+	<INICIO> Bloque()
+}
+
+void Bloque():{}{
+	try{
+		(ExpresionesGlobales() | Sentencias()  | Funciones() | LlamadaFuncion() <PUNTOYCOMA> | Clas() )* (<FIN>)? <EOF>
+	}
+	catch(ParseException e){
+		System.out.println("ERROR SINTACTICO");
+		System.out.println(e.toString());
+		Token t;
+		numeroDeErrores++;
+		do {
+			t = getNextToken();
+		}while(t.kind != PUNTOYCOMA && t.kind != FIN);
+
+		Bloque();
+	}
+}
+
+void ExpresionesGlobales():{}{
+	(Variable()<OPERASIGNACION>)+(
+		<CADENA>
+		|(Variable() | <ENTERO> | <REAL> )( <OPERARITMETICO> (Variable() | <ENTERO> | <REAL>))*
+		| <CORCHIZQ> ( (<CADENA> | <ENTERO> | <REAL>) <OPERASIG_ARRAY> ( <CADENA> | <ENTERO> | <REAL>) <COMA>)* <CORCHDER>
+		| FuncionAnonima()
+		| LlamadaFuncion()
+		| NEW LlamadaFuncion()
+		)<PUNTOYCOMA>
+	| Variable() (<COMA> Variable())* <PUNTOYCOMA>
+	| Constante() <OPERASIGNACION> ( <CADENA> | <ENTERO>| <REAL> | LlamadaFuncion()) <PUNTOYCOMA>
+
+	|<ECHO> ((Variable() | <ENTERO> | <REAL> |)( <OPERARITMETICO> (Variable() | <ENTERO> | <REAL>))*
+			 |<CADENA> ( <PUNTO> ( Variable() | <CADENA>))?
+			 | FuncionAnonima()
+			 |LlamadaFuncion()
+		)<PUNTOYCOMA>
+
+}
+
+void ExpresionesLocales():{}{
+	( TipoVariable() Variable() <OPERASIGNACION>)+ (
+		<CADENA>
+		| ( Variable() | <ENTERO> | <REAL>) ( <OPERARITMETICO> ( Variable() | <ENTERO> | <REAL>))*
+		)<PUNTOYCOMA>
+	| TipoVariable() Variable()(<COMA> Variable())* <PUNTOYCOMA>
+}
+
+void BloqueLocal():{}{
+	(ExpresionesLocales() | ExpresionesGlobales() | Sentencias() | Funciones() | LlamadaFuncion() | <PUNTOYCOMA> | Clase())*
+}
+
+//VARIABLES
+
+void Variable():{}{
+	<DOLAR> <IDENTIFICADOR>
+}
+
+void TipoVariable():{}{
+	<GLOBAL>
+	| (<STATIC>)? (<PUBLIC> | <PROTECTED> | <PRIVATE>)?
+}
+
+void Constante():{}{
+	<CONST> <IDENTIFICADOR>
+}
+
+//SENTENCIAS, ESTRUCTURAS SECUENCIALES, CONDICIONALES, REPETITIVAS
+void Sentencias():{}{
+	( SentenciaIf() | SentenciaWhile() | SentenciaDoWhile() | SentenciaFor() | SentenciaSwitch())
+}
+
+void SentenciaIf():{}{
+	<IF> <PARENIZQ> Comparacion() <PARENDER><LLAVEIZQ> BloqueLocal()(<BREAK><PUNTOYCOMA>)? <LLAVEDER>(SentenciaElse())?
+}
+
+void SentenciaElse():{}{
+	<ELSE> <LLAVEIZQ> BloqueLocal() (<BREAK><PUNTOYCOMA>)? <LLAVEDER>
+}
+
+void SentenciaWhile():{}{
+	<WHILE> <PARENIZQ> Comparacion() <PARENDER> ( <LLAVEIZQ> BloqueLocal()( <BREAK> <PUNTOYCOMA>)?<LLAVEDER>
+	| <DOSPUNTOS> BloqueLocal() (<BREAK><PUNTOYCOMA>)? <ENDWHILE> <PUNTOYCOMA>
+	)
+}
+
+void SentenciaDoWhile():{}{
+	<DO> <LLAVEIZQ> BloqueLocal()(<BREAK> <PUNTOYCOMA>)? <LLAVEDER> <WHILE> <PARENIZQ> Comparacion() <PARENDER> <PUNTOYCOMA>
+
+}
+
+void SentenciaFor():{}{
+	<FOR> <PARENIZQ> ( Expresion1for())? <PUNTOYCOMA> (Comparacion())? <PUNTOYCOMA>(Expresion2for())?<PARENDER>(<LLAVEIZQ> BloqueLocal()<LLAVEDER>)
+}
+
+void Sentencia1For():{}{
+	Variable() <OPERASIGNACION> ( Variable() | <REAL> | <ENTERO>)(<COMA> Expresion1for())*
+}
+
+void Sentencia2For():{}{
+	(<OPERINCDEC> Variable()
+		| <PRINT> Variable()
+		|<ECHO> Variable()
+		| Variable() ( <OPERINCDEC> | ( <OPERCOMBINADO_ART> ( Variable()| <ENTERO> | <REAL>)
+			| <OPERCOMBINADO_CAD> <CADENA>))
+	)(<COMA> Expresion2for())*
+}
+
+void SentenciaSwitch():{}{
+	<SWITCH> <PARENIZQ> Variable() <PARENDER> (<LLAVEIZQ> BloqueCase() <LLAVEDER>
+		| <DOSPUNTOS> BloqueCase() <ENDSWITCH> <PUNTOYCOMA>)
+}
+
+void BloqueCase():{}{
+	(<CASE> (<ENTERO>| <REAL> | <CADENA>)(<DOSPUNTOS>|<PUNTOYCOMA>)BloqueLocal()(<BREAK><PUNTOYCOMA>)?)+(<DEFAULT> (<DOSPUNTOS> | <PUNTOYCOMA>) BloqueLocal()(<BREAK><PUNTOYCOMA>)?)?
+}
+
+void Comparacion():{}{
+	Variable() <OPERCOMPARACION> ( Variable()|<ENTERO>|<REAL>|<CADENA>)(<OPERLOGICO> Variable()<OPERCOMPARACION>(Variable()| <ENTERO> | <REAL> | <CADENA>))*
+	| (<OPERLOGNOT>)? Variable()
+	|LlamadaFuncion()
+}
+
+//FUNCIONES
+void Funciones():{}{
+	TipoVariable() <FUNCTION> <IDENTIFICADOR> <PARENIZQ> (Argumentos())? <PARENIZQ><LLAVEIZQ> BloqueLocal() (DevolverValores())? <LLAVEDER>
+}
+
+void FuncionAnonima():{}{
+	<FUNCTION><PARENIZQ>( Argumentos())? <PARENDER><LLAVEIZQ> BloqueLocal()(DevolverValores())? <LLAVEDER>
+}
+
+void Argumentos():{}{
+	(<AMPERSAND>)? Variable() (<COMA> (<AMPERSAND>)? Variable() | <OPERASIGNACION>(<REAL>|<ENTERO>|<CADENA>|<NULL>))*
+}
+
+void DevolverValores():{}{
+	<RETURN>( (Variable() | <ENTERO> | <REAL>)( <OPERARITMETICO> (Variable() | <ENTERO> | <REAL>))*
+		|<CADENA>
+		) <PUNTOYCOMA>
+}
+
+//LLAMADA FUNCION
+void LlamadaFuncion():{}{
+	<IDENTIFICADOR> <PARENIZQ> (PasarArgumentos())? <PARENDER>
+}
+
+void PasarArgumentos():{}{
+	(Variable() | <REAL> | <ENTERO>)(<COMA> ( Variable() | <REAL> | <ENTERO>) | <OPERARITMETICO>(Variable() | <REAL> | <ENTERO>))*
+}
+
+//CLASE
+
+void Clase():{}{
+	<CLASS> <IDENTIFICADOR> ( <EXTENDS> <IDENTIFICADOR>)?<LLAVEIZQ>(Atributos()| Metodos())* <LLAVEDER>
+}
+
+void Atributos():{}{
+	TipoVariable() Variable() <PUNTOYCOMA>
+}
+void Metodos():{}{
+	Funciones()
+}
